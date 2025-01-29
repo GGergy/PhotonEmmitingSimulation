@@ -1,13 +1,24 @@
 """
 Manuals
 
-Hold left mouse button on circle and move cursor for moving this circle
-Press R on circle to remove it. You can't remove a photon source
-Click on Add button in bottom left corner for add new random circle
-Spin wheel up and down with cursor on circle to resize it
-Press C to clear all photons
-Press right mouse button on photon source to start or stop emission
-Press Escape to exit
+UI interaction:
+- Hold left mouse button on circle and move cursor for moving this circle
+- Press R on circle to remove it. You can't remove a photon source
+- Click on Add button in bottom left corner for add new random circle
+- Click on Set vars button in bottom left corner for set up some system parameters
+- Spin wheel up and down with cursor on circle to resize it
+- Press C to clear all photons
+- Press right mouse button on photon source to start or stop emission
+- Press Escape to exit
+
+Vars:
+- Random axis value is a range of random values (from -value to value) by which some parameters of photon motion are
+  changed for their greater naturalness.
+- Probability of photon absorption - the probability of photon absorption by an object in a collision
+  (from 0 to 1, where 0 is never, 1 is always)
+- Ticks period of photons spawn - once in how many frames a new generation of photons is created
+- Degrees step of photons generation - the step of the degree of the photon flight angle (set to range(0, 360, step))
+- Photon size - the length of the side of the square of the photon
 
 """
 
@@ -188,6 +199,7 @@ class VarsRegistry(tk.Tk):
     def __init__(self, *args, **kwargs):
         self.active = False
         tk.Tk.__init__(self, *args, **kwargs)
+        self.title("Settings")
         self.axis_d = tk.Label(text="Random axis value (float)")
         self.axis_e = tk.Entry()
         self.axis_d.pack(anchor=tk.NW, padx=20, pady=2)
@@ -297,13 +309,13 @@ while running:
     for obj in Figure.__objects__:
         obj.listen(event_list)
     screen.fill("black")
-    text = fps_font.render(f"{clock.get_fps():.2f} FPS", True, "white")
-    screen.blit(text, text.get_rect(center=(d_w - 100, 50)))
     for obj in Figure.__objects__:
         obj.blit()
     for obj in PhotonSource.__objects__:
         obj.emit()
     pygame_widgets.update(event_list)
+    text = fps_font.render(f"{clock.get_fps():.2f} FPS", True, "white")
+    screen.blit(text, text.get_rect(center=(d_w - 100, 50)))
     pygame.display.update()
     clock.tick()
 
